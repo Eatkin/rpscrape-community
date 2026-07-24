@@ -10,4 +10,5 @@ __*/
 
 .DS_Store
 settings/user_settings.toml
+settings/user_racecard_settings.toml
 
