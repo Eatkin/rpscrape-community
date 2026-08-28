@@ -169,8 +169,6 @@ def parse_runners(
             runner.lbs = runner_json["weightCarried"]
 
         # Equipment
-        # The old separate windSurgeryFirstTime/windSurgerySecondTime fields have collapsed
-        # into a single windSurgery field, so the "second time" distinction is no longer available.
         if should_include_group("equipment"):
             runner.headgear = runner_json["horseHeadGear"]
             runner.headgear_first = runner_json["horseHeadGearFirstTime"]
@@ -179,9 +177,6 @@ def parse_runners(
             runner.wind_surgery_second = False
 
         # Breeding
-        # breederName/breederUid are no longer present on this page at all; sireId/damId/
-        # damsireId are derived from their profile URLs since the numeric IDs themselves
-        # are no longer inlined.
         if should_include_group("breeding"):
             runner.sire = clean_string(runner_json["sireName"])
             runner.sire_id = _horse_id_from_url(runner_json.get("sireUrl"))
@@ -262,8 +257,6 @@ def parse_runners(
             ]
 
         # Quotes data
-        # profile["quotes"] shape is unverified (no runner sampled while building this fix
-        # had any quotes), so this reads defensively via .get() rather than direct indexing.
         if should_include_group("quotes") and profile:
             if profile.get("quotes"):
                 runner.quotes = [

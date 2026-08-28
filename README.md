@@ -16,6 +16,24 @@
 
 The original repository had no license attached, so nothing here is retroactively relicensed — see [License](#license) for what that means in practice. If joenano would like this fork taken down, they can request that and it will be honoured.
 
+### What's Changed
+
+#### Authentication 
+
+The original `rpscrape` relied on authentication for making requests, but both the authentication service used by Racing Post has changed, and it seems auth is no longer necessary.
+
+#### Scraping Method
+
+Previously Racing Post's public data API was used, but this has since be deprecated with json data being embedded into the html pages themselves.
+
+#### Data Collection
+
+Some data that was previously available via racecards is now gated behind a horse's profile - this can be enabled in `settings.toml` by setting `fetch_profiles = true`
+
+#### Formatting
+
+Set up formatting and linting rules in `pyproject.toml` using `ruff` and `ty`.
+
 ### Requirements
 
 You must have Python 3.13 or greater, and GIT installed. You can download the latest Python release [here](https://www.python.org/downloads/). You can download GIT [here](https://git-scm.com/downloads).
@@ -196,10 +214,6 @@ The settings file lets you control:
 
 - **Data Collection**: Whether to fetch stats and profiles
 - **Field Groups**: Which groups of runner fields to include (core, basic_info, performance, jockey, trainer, etc.)
-
-##### Authentication
-
-The original `rpscrape` relied on authentication for making requests, but both the authentication service used by Racing Post has changed, and it seems auth is no longer necessary.
 
 ### License
 
