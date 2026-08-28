@@ -1,13 +1,12 @@
 from collections.abc import Iterator
+
 from orjson import loads
 
+_courses = loads(open("../courses/_courses").read())
 
-_courses = loads(open('../courses/_courses', 'r').read())
 
-
-def courses(code: str = 'all') -> Iterator[tuple[str, str]]:
-    for course_id, course in _courses[code].items():
-        yield course_id, course
+def courses(code: str = "all") -> Iterator[tuple[str, str]]:
+    yield from _courses[code].items()
 
 
 def course_name(code: str) -> str:
@@ -15,23 +14,23 @@ def course_name(code: str) -> str:
         return code
     for course in courses():
         if course[0] == code:
-            return course[1].replace(' ', '-')
+            return course[1].replace(" ", "-")
 
-    return ''
+    return ""
 
 
 def course_search(term: str):
     term = term.lower()
-    for course_id, course_name in _courses['all'].items():
+    for course_id, course_name in _courses["all"].items():
         if term in course_name.lower():
             print_course(course_id, course_name)
 
 
 def print_course(code: str, course: str):
-    print(f'\tCODE: {code: <4} |  {course}')
+    print(f"\tCODE: {code: <4} |  {course}")
 
 
-def print_courses(code: str = 'all'):
+def print_courses(code: str = "all"):
     for course_id, course_name in _courses[code].items():
         print_course(course_id, course_name)
 
@@ -41,5 +40,5 @@ def valid_course(code: str) -> bool:
 
 
 def valid_meeting(course: str):
-    invalid = ['free to air', 'worldwide stakes', '(arab)']
-    return all([x not in course for x in invalid])
+    invalid = ["free to air", "worldwide stakes", "(arab)"]
+    return all(x not in course for x in invalid)

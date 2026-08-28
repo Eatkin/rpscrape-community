@@ -1,5 +1,5 @@
-from pathlib import Path
 from dataclasses import dataclass
+from pathlib import Path
 
 
 @dataclass(frozen=True)
@@ -30,15 +30,15 @@ def build_paths(
 ) -> Paths:
     project_root = Path(__file__).resolve().parents[2]
 
-    data_root = project_root / 'data'
-    cache_root = project_root / '.cache'
+    data_root = project_root / "data"
+    cache_root = project_root / ".cache"
 
-    ext = '.csv.gz' if gzip_output else '.csv'
+    ext = ".csv.gz" if gzip_output else ".csv"
 
-    output = data_root / request.typed_dir() / f'{request.filename}{ext}'
-    progress = cache_root / 'progress' / request.typed_dir() / f'{request.filename}.progress'
-    urls = cache_root / 'urls' / request.scoped_dir() / f'{request.filename}.csv'
-    betfair = cache_root / 'betfair' / f'{request.filename}.csv'
+    output = data_root / request.typed_dir() / f"{request.filename}{ext}"
+    progress = cache_root / "progress" / request.typed_dir() / f"{request.filename}.progress"
+    urls = cache_root / "urls" / request.scoped_dir() / f"{request.filename}.csv"
+    betfair = cache_root / "betfair" / f"{request.filename}.csv"
 
     for path in (output, progress, urls, betfair):
         path.parent.mkdir(parents=True, exist_ok=True)

@@ -1,34 +1,35 @@
-from dataclasses import dataclass, field
+from dataclasses import dataclass
+from dataclasses import field
 
 
 @dataclass
 class RaceInfo:
-    date: str = ''
-    region: str = ''
-    course_id: str = ''
-    course: str = ''
+    date: str = ""
+    region: str = ""
+    course_id: str = ""
+    course: str = ""
     course_detail: str | None = None
 
-    race_id: str = ''
-    off: str = ''
-    race_name: str = ''
+    race_id: str = ""
+    off: str = ""
+    race_name: str = ""
 
-    race_type: str = ''
-    race_class: str = ''
-    pattern: str = ''
+    race_type: str = ""
+    race_class: str = ""
+    pattern: str = ""
 
-    age_band: str = ''
-    rating_band: str = ''
-    sex_rest: str = ''
+    age_band: str = ""
+    rating_band: str = ""
+    sex_rest: str = ""
 
-    dist: str = ''
-    dist_f: str = ''
-    dist_m: str = ''
-    dist_y: str = ''
+    dist: str = ""
+    dist_f: str = ""
+    dist_m: str = ""
+    dist_y: str = ""
 
-    going: str = ''
-    surface: str = ''
-    ran: str = ''
+    going: str = ""
+    surface: str = ""
+    ran: str = ""
 
 
 @dataclass
@@ -80,13 +81,13 @@ class RunnerInfo:
     ip_vol: list[str] = field(default_factory=list)
 
     def set_bsp_list_width(self, n: int):
-        self.bsp = [''] * n
-        self.wap = [''] * n
-        self.morning_wap = [''] * n
-        self.pre_min = [''] * n
-        self.pre_max = [''] * n
-        self.ip_min = [''] * n
-        self.ip_max = [''] * n
-        self.morning_vol = [''] * n
-        self.pre_vol = [''] * n
-        self.ip_vol = [''] * n
+        self.bsp = [""] * n
+        self.wap = [""] * n
+        self.morning_wap = [""] * n
+        self.pre_min = [""] * n
+        self.pre_max = [""] * n
+        self.ip_min = [""] * n
+        self.ip_max = [""] * n
+        self.morning_vol = [""] * n
+        self.pre_vol = [""] * n
+        self.ip_vol = [""] * n

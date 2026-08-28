@@ -1,0 +1,49 @@
+[project]
+name = "rpscrape-community"
+version = "1.0.0"
+description = "Community fork of the now private rpscrape"
+readme = "README.md"
+requires-python = ">=3.13"
+dependencies = [
+  "curl_cffi>=0.13",
+  "jarowinkler>=2.0.1",
+  "lxml>=4.7",
+  "orjson>=3.6",
+  "tomli>=2.0",
+  "tqdm>=4.67",
+]
+
+[tool.ruff]
+line-length = 120
+target-version = "py313"
+
+[tool.ruff.lint]
+select = [
+    "E", "W", "F", "I", "N", "UP", "B", "C90", "SIM", "RUF", "C4",
+]
+ignore = [
+    "E501",  # formatter handles line length
+    "E203",
+]
+exclude = [".git", "__pycache__", ".venv", "venv", ".pytest_cache", ".mypy_cache"]
+
+[tool.ruff.lint.mccabe]
+max-complexity = 10
+
+[tool.ruff.lint.isort]
+force-single-line = true
+
+[tool.ruff.lint.per-file-ignores]
+"__init__.py" = ["F401"]
+
+[tool.ruff.lint.pylint]
+max-args = 5
+max-branches = 12
+max-returns = 6
+max-statements = 50
+
+[tool.ruff.format]
+
+[tool.ty]
+[tool.ty.environment]
+python-version = "3.13"

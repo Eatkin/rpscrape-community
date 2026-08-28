@@ -1,22 +1,22 @@
 from orjson import loads
 
-_regions = loads(open('../courses/_regions', 'r').read())
+_regions = loads(open("../courses/_regions", "r").read())
 
 
 def get_region(course_id: str) -> str:
-    courses = loads(open('../courses/_courses', 'r').read())
-    courses.pop('all')
+    courses = loads(open("../courses/_courses", "r").read())
+    courses.pop("all")
 
     for region, course in courses.items():
         for _id in course.keys():
             if _id == course_id:
                 return region.upper()
 
-    return ''
+    return ""
 
 
 def print_region(code: str, region: str):
-    print(f'\tCODE: {code: <4} |  {region}')
+    print(f"\tCODE: {code: <4} |  {region}")
 
 
 def print_regions():

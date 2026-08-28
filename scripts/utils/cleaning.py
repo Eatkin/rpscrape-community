@@ -1,26 +1,27 @@
-from re import search, sub, IGNORECASE
+from re import search
+from re import sub
 
-RE_CLASS = r'(\(|\s)[Cc]lass (\d|[A-Ha-h])(\)|\s)'
-RE_GROUP = r'(\(|\s)(?:[Gg]rade|[Gg]roup) (\d|[A-Ca-c]|I*)(\)|\s)'
+RE_CLASS = r"(\(|\s)[Cc]lass (\d|[A-Ha-h])(\)|\s)"
+RE_GROUP = r"(\(|\s)(?:[Gg]rade|[Gg]roup) (\d|[A-Ca-c]|I*)(\)|\s)"
 
 RE_PATTERNS: list[tuple[str, str]] = [
-    ('class', RE_CLASS),
-    ('group', RE_GROUP),
-    ('grade', RE_GROUP),
+    ("class", RE_CLASS),
+    ("group", RE_GROUP),
+    ("grade", RE_GROUP),
 ]
 
 
 def clean_string(s: str) -> str:
     if not s:
-        return ''
+        return ""
 
     s = s.strip()
 
-    for char in [',', '"', "'", '\x80', '\\x80']:
-        s = s.replace(char, '')
+    for char in [",", '"', "'", "\x80", "\\x80"]:
+        s = s.replace(char, "")
 
-    s = sub(r'\(\s*\)+', '', s)
-    s = sub(r'\s+', ' ', s)
+    s = sub(r"\(\s*\)+", "", s)
+    s = sub(r"\s+", " ", s)
 
     return s.strip()
 
@@ -29,16 +30,16 @@ def clean_race(race_name: str) -> str:
     name = race_name.strip()
     lname = name.lower()
 
-    if 'Forte Mile Guaranteed Minimum Value £60000 (Group' in name:
-        return 'Sandown Mile'
+    if "Forte Mile Guaranteed Minimum Value £60000 (Group" in name:
+        return "Sandown Mile"
 
     for key, regex in RE_PATTERNS:
         if key in lname:
             if match := search(regex, name):
-                return clean_string(name.replace(match.group(), '').strip())
+                return clean_string(name.replace(match.group(), "").strip())
 
-    if 'listed' in lname:
-        return clean_string(name.replace('Listed Race', '').replace('(Listed)', '').strip())
+    if "listed" in lname:
+        return clean_string(name.replace("Listed Race", "").replace("(Listed)", "").strip())
 
     return clean_string(name)
 

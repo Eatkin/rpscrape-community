@@ -1,8 +1,7 @@
+from collections.abc import Callable
 from re import search
 
-from collections.abc import Callable
 from lxml.html import HtmlElement
-
 from utils.cleaning import clean_string
 
 
@@ -19,38 +18,38 @@ class Pedigree:
         self.pedigree_info()
 
     def get_dam(self, info_dam: HtmlElement) -> str:
-        text: str = info_dam.text or ''
-        dam: str = clean_string(text.strip().strip('()'))
+        text: str = info_dam.text or ""
+        dam: str = clean_string(text.strip().strip("()"))
 
-        span: HtmlElement | None = info_dam.find('span')
+        span: HtmlElement | None = info_dam.find("span")
         dam_nat: str | None = span.text if span is not None else None
-        region_dam: str = dam_nat.strip() if dam_nat else '(GB)'
+        region_dam: str = dam_nat.strip() if dam_nat else "(GB)"
 
-        return f'{dam} {region_dam}'
+        return f"{dam} {region_dam}"
 
     def get_damsire(self, info_damsire: HtmlElement) -> str:
-        text: str = info_damsire.text or ''
-        text = text.strip().strip('()')
+        text: str = info_damsire.text or ""
+        text = text.strip().strip("()")
         damsire: str = clean_string(text)
 
-        if damsire == 'Damsire Unregistered':
-            return ''
+        if damsire == "Damsire Unregistered":
+            return ""
 
         return damsire
 
     def get_sire(self, info_sire: HtmlElement) -> str:
-        text: str = info_sire.text or ''
+        text: str = info_sire.text or ""
         sire: str = text.strip()
 
-        if '(' in sire:
-            match = search(r'\((.*)\)', sire)
-            region_sire: str = match.groups()[0] if match else 'GB'
+        if "(" in sire:
+            match = search(r"\((.*)\)", sire)
+            region_sire: str = match.groups()[0] if match else "GB"
         else:
-            region_sire = 'GB'
+            region_sire = "GB"
 
-        sire = clean_string(sire.split('(')[0])
+        sire = clean_string(sire.split("(")[0])
 
-        return f'{sire} ({region_sire})'
+        return f"{sire} ({region_sire})"
 
     def _append_entry(
         self,
@@ -63,15 +62,15 @@ class Pedigree:
         if len(ped_info) > index:
             element = ped_info[index]
             collection.append(transform(element))
-            id_collection.append(element.attrib.get('href', '').split('/')[3])
+            id_collection.append(element.attrib.get("href", "").split("/")[3])
         else:
-            collection.append('')
-            id_collection.append('')
+            collection.append("")
+            id_collection.append("")
 
     def pedigree_info(self) -> None:
         for pedigree in self.pedigrees:
-            ped_info: list[HtmlElement] = pedigree.findall('a')
-            has_sire: bool = '-' in pedigree.text_content()
+            ped_info: list[HtmlElement] = pedigree.findall("a")
+            has_sire: bool = "-" in pedigree.text_content()
 
             self._append_entry(
                 self.sires,
@@ -85,6 +84,4 @@ class Pedigree:
             self._append_entry(self.dams, self.id_dams, ped_info, dam_index, self.get_dam)
 
             damsire_index = dam_index + 1
-            self._append_entry(
-                self.damsires, self.id_damsires, ped_info, damsire_index, self.get_damsire
-            )
+            self._append_entry(self.damsires, self.id_damsires, ped_info, damsire_index, self.get_damsire)

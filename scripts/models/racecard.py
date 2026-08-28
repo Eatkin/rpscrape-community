@@ -1,5 +1,8 @@
-from dataclasses import dataclass, field, asdict
+from dataclasses import asdict
+from dataclasses import dataclass
+from dataclasses import field
 from typing import Any
+
 from orjson import dumps
 
 
@@ -97,4 +100,4 @@ class Racecard:
         return asdict(self)
 
     def to_json(self) -> str:
-        return dumps(self.to_dict()).decode('utf-8')
+        return dumps(self.to_dict()).decode("utf-8")

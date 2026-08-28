@@ -1,13 +1,20 @@
-# rpscrape
+# rpscrape-community
 
 #### Table of Contents
 
+- [About This Fork](#about-this-fork)
 - [Requirements](#requirements)
 - [Install](#install)
 - [Examples](#examples)
 - [Scrape Racecards](#scrape-racecards)
 - [Settings](#settings)
-- [Authentication](#authentication)
+- [License](#license)
+
+### About This Fork
+
+`rpscrape-community` is a continuation of [rpscrape](https://github.com/joenano/rpscrape), originally created by **joenano**. The original repository has gone private/offline and is no longer maintained, and with changes to how Racing Post serves data, the scraping has broken. This fork exists to keep the scraper working against the current site and to carry the project forward.
+
+The original repository had no license attached, so nothing here is retroactively relicensed — see [License](#license) for what that means in practice. If joenano would like this fork taken down, they can request that and it will be honoured.
 
 ### Requirements
 
@@ -17,20 +24,19 @@ You must have Python 3.13 or greater, and GIT installed. You can download the la
 - [jarowinkler](https://pypi.org/project/jarowinkler/)
 - [LXML](https://lxml.de/)
 - [orjson](https://pypi.org/project/orjson/1.3.0/)
-- [python-dotenv](https://pypi.org/project/python-dotenv/)
 - [tomli](https://pypi.org/project/tomli/)
 - [TQDM](https://pypi.org/project/tqdm/)
 
 The above Python modules are required, they can be installed using PIP(_included with Python_):
 
 ```
-pip3 install curl_cffi jarowinkler lxml orjson python-dotenv tomli tqdm
+pip3 install curl_cffi jarowinkler lxml orjson tomli tqdm
 ```
 
 ### Install
 
 ```
-git clone https://github.com/joenano/rpscrape.git
+git clone <this repository's URL>
 ```
 
 #### Command-Line Options
@@ -143,7 +149,7 @@ List courses in a region:
 
 ##### Settings
 
-The [user_settings.toml](https://github.com/joenano/rpscrape/blob/master/user_settings.toml) file contains the data fields that can be scraped. You can turn fields on and off by setting them true or false. The order of fields in that file will be maintained in the output csv. The [default_settings.toml](https://github.com/joenano/rpscrape/blob/master/default_settings.toml) file should not be edited, its there as a backup and to introduce any new fields without changing user settings.
+The `user_settings.toml` file contains the data fields that can be scraped. You can turn fields on and off by setting them true or false. The order of fields in that file will be maintained in the output csv. The `default_settings.toml` file should not be edited, its there as a backup and to introduce any new fields without changing user settings.
 
 ## Scrape Racecards
 
@@ -191,19 +197,14 @@ The settings file lets you control:
 - **Data Collection**: Whether to fetch stats and profiles
 - **Field Groups**: Which groups of runner fields to include (core, basic_info, performance, jockey, trainer, etc.)
 
-#### Authentication
+##### Authentication
 
-Credentials are stored in a .env file in the root directory. Make sure .env is added to .gitignore.
+The original `rpscrape` relied on authentication for making requests, but both the authentication service used by Racing Post has changed, and it seems auth is no longer necessary.
 
-```
-EMAIL=your@email.com
-ACCESS_TOKEN=your_access_token
-```
+### License
 
-To find your tokens, login to the site and open the cookies section in the storage tab of your browser's developer tools.
+No license was ever attached to the original [joenano/rpscrape](https://github.com/joenano/rpscrape) repository, so none of that original code can be retroactively relicensed by this fork — it remains all-rights-reserved to joenano by default, and stays that way here too.
 
-You need the value for cognito access token (not to be confused with the AccessToken cookie).
+Changes made in this fork **from the point it diverged onward** are released under the MIT License (see [LICENSE](LICENSE)). This is a practical, forward-looking choice, not a claim of rights over joenano's original work.
 
-There will be multiple keys beginning with `CognitoIdentityServiceProvider`, you want the value for the one that ends with `.accessToken`. It should be directly under email if keys are sorted by name.
-
-![alt text](https://i.postimg.cc/nLJM1QBg/20260103-113046.png)
+If joenano (or whoever holds rights to the original work) objects to this fork existing, or wants it taken down, that request will be honoured.
