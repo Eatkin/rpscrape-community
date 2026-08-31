@@ -28,11 +28,15 @@ class NetworkClient:
         timeout: int = 14,
         min_interval: float = 2.0,
         jitter: float = 1.0,
+        retries: int = 7,
+        retry_delay: float = 1.4,
     ) -> None:
         self.session: Session = Session(impersonate=choice(BROWSERS))
         self.timeout: int = timeout
         self.min_interval: float = min_interval
         self.jitter: float = jitter
+        self.retries: int = retries
+        self.retry_delay: float = retry_delay
         self._last_request: float | None = None
 
     def _pace(self) -> None:
@@ -48,9 +52,11 @@ class NetworkClient:
         self,
         url: str,
         allow_redirects: bool = True,
-        retries: int = 7,
-        delay: float = 1.4,
+        retries: int | None = None,
+        delay: float | None = None,
     ) -> tuple[int, Response]:
+        retries = self.retries if retries is None else retries
+        delay = self.retry_delay if delay is None else delay
         backoff = 1
         for attempt in range(1, retries):
             self._pace()

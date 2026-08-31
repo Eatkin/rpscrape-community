@@ -215,6 +215,7 @@ def scrape_races(
             for row in race.csv_data:
                 _ = f.write(row + "\n")
 
+            f.flush()
             _ = paths.progress.write_text(url)
 
     print("Finished scraping.")
@@ -252,7 +253,7 @@ def main():
     if args.clean:
         clear_request(paths)
 
-    client = NetworkClient()
+    client = NetworkClient(**settings.network)
 
     if args.dates != []:
         race_urls = load_or_save_urls(

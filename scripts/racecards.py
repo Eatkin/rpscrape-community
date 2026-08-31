@@ -20,6 +20,7 @@ from utils.cleaning import clean_string
 from utils.network import NetworkClient
 from utils.profiles import get_profiles
 from utils.region import valid_region
+from utils.settings import Settings
 from utils.stats import Stats
 
 type Racecards = defaultdict[str, defaultdict[str, defaultdict[str, dict[str, Any]]]]
@@ -458,7 +459,7 @@ def main() -> None:
         print(f"Invalid region: {args.region}")
         sys.exit(1)
 
-    client = NetworkClient()
+    client = NetworkClient(**Settings().network)
 
     meetings = get_meetings(client, dates, region)
 

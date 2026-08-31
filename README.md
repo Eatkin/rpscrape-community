@@ -20,7 +20,7 @@ The original repository had no license attached, so nothing here is retroactivel
 
 #### Authentication 
 
-The original `rpscrape` relied on authentication for making requests, but both the authentication service used by Racing Post has changed, and it seems auth is no longer necessary.
+The original `rpscrape` relied on authentication for making requests, however the authentication used by Racing Post has changed, so this is no longer viable without further investigation.
 
 #### Scraping Method
 
@@ -30,9 +30,28 @@ Previously Racing Post's public data API was used, but this has since be depreca
 
 Some data that was previously available via racecards is now gated behind a horse's profile - this can be enabled in `settings.toml` by setting `fetch_profiles = true`
 
+Race results are streamed to the output CSV as each race is scraped, rather than being collected in memory and dumped at the end - so you can `tail -f` the output file to watch results land, and progress is preserved incrementally if a run is interrupted (see the caching note under [Command-Line Options](#command-line-options)).
+
 #### Formatting
 
 Set up formatting and linting rules in `pyproject.toml` using `ruff` and `ty`.
+
+#### Rate Limiting
+
+In my experience Racing Post _will_ IP block you if you scrape too aggressively, and unfortunately implementing rate limiting is the only way to respect this, so scraping will be significantly slower than what was previously possible.
+
+Rate limiting is configurable via the `[network]` table in `settings.toml`:
+
+```toml
+[network]
+timeout = 14        # Request timeout in seconds
+min_interval = 2.0  # Minimum seconds to wait between requests
+jitter = 1.0        # Random extra delay (0-jitter seconds) added on top of min_interval
+retries = 7         # Number of attempts before giving up on a blocked (406) request
+retry_delay = 1.4   # Base delay in seconds between retries, doubles after each attempt
+```
+
+Lower `min_interval`/`jitter` to scrape faster at greater risk of being blocked, or raise them to be more conservative. As with other settings, copy `default_settings.toml` to `user_settings.toml` to override these without your changes being clobbered on update - see [Settings](#settings).
 
 ### Requirements
 
@@ -81,6 +100,8 @@ git clone <this repository's URL>
 You cannot specify both --region and --course at the same time.
 
 When scraping jumps data, the year refers to the season start. For example, the 2019 Cheltenham Festival is in the 2018-2019 season: use 2018.
+
+Each request (a given date/year + region/course + type combination) caches its race URL list and scraping progress under `.cache/`, so re-running the same request resumes where it left off instead of re-fetching everything. If a request looks stuck or produces no output - for example after an interrupted run, or if Racing Post's listing changed - delete that request's files under `.cache/` (or just run with `--clean`) to force it to start fresh.
 
 ### Examples
 
@@ -168,6 +189,8 @@ List courses in a region:
 ##### Settings
 
 The `user_settings.toml` file contains the data fields that can be scraped. You can turn fields on and off by setting them true or false. The order of fields in that file will be maintained in the output csv. The `default_settings.toml` file should not be edited, its there as a backup and to introduce any new fields without changing user settings.
+
+The same file's `[network]` table controls rate limiting - see [Rate Limiting](#rate-limiting).
 
 ## Scrape Racecards
 

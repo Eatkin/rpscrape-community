@@ -8,6 +8,13 @@ gzip_output = false # If false save uncompressed .csv files, if true save compre
 
 betfair_data = false # Get Betfair data
 
+[network]
+timeout = 14        # Request timeout in seconds
+min_interval = 2.0  # Minimum seconds to wait between requests
+jitter = 1.0        # Random extra delay (0-jitter seconds) added on top of min_interval
+retries = 7         # Number of attempts before giving up on a blocked (406) request
+retry_delay = 1.4   # Base delay in seconds between retries, doubles after each attempt
+
 [fields]
 
 [fields.race_info]

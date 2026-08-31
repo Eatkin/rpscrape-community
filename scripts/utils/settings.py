@@ -9,6 +9,8 @@ class Settings:
     def __init__(self) -> None:
         self.toml: Mapping[str, Any] | None = self.load_toml()
 
+        self.network: dict[str, Any] = self.get_network_settings()
+
         if self.toml is None:
             self.fields: list[str] = []
             self.csv_header: str = ""
@@ -16,6 +18,21 @@ class Settings:
 
         self.fields = self.get_fields()
         self.csv_header = ",".join(self.fields)
+
+    def get_network_settings(self) -> dict[str, Any]:
+        defaults: dict[str, Any] = {
+            "timeout": 14,
+            "min_interval": 2.0,
+            "jitter": 1.0,
+            "retries": 7,
+            "retry_delay": 1.4,
+        }
+
+        if self.toml is None:
+            return defaults
+
+        defaults.update(self.toml.get("network", {}))
+        return defaults
 
     def get_fields(self) -> list[str]:
         fields: list[str] = []
