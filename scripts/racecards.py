@@ -287,7 +287,9 @@ def parse_runners(
 
         # Forecasted odds
         if should_include_group("forecasted_odds"):
-            runner.forecasted_odds = float(runner_json.get("forecastOddsValue") or 0.0) or None
+            # forecastOddsValue is the fractional price as a number (11/4 -> 2.75); add the stake for decimal odds
+            forecast = float(runner_json.get("forecastOddsValue") or 0.0)
+            runner.forecasted_odds = forecast + 1 if forecast else None
 
     return runners
 
