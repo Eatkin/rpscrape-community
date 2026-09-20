@@ -1,4 +1,5 @@
-from dataclasses import dataclass, asdict
+from dataclasses import asdict
+from dataclasses import dataclass
 from typing import Any
 
 
@@ -61,6 +62,14 @@ class Stats:
         self._parse_horses(stats.get("horses", []))
         self._parse_jockeys_trainers(stats.get("jockeys", []), self.jockeys)
         self._parse_jockeys_trainers(stats.get("trainers", []), self.trainers)
+
+    def __repr__(self) -> str:
+        return (
+            f"Stats(horses={len(self.horses)}, jockeys={len(self.jockeys)}, trainers={len(self.trainers)})\n"
+            f"  horses={self.horses!r}\n"
+            f"  jockeys={self.jockeys!r}\n"
+            f"  trainers={self.trainers!r}"
+        )
 
     def _parse_horses(self, horses: list[dict]) -> None:
         for horse in horses:

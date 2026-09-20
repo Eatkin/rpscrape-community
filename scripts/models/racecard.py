@@ -22,6 +22,7 @@ class Runner:
     damsire_region: str | None = None
     dob: str | None = None
     draw: int | None = None
+    forecasted_odds: float | None = None
     form: str | None = None
     gelding_first_time: bool = False
     headgear: str | None = None

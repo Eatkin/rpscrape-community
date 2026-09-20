@@ -64,3 +64,6 @@ medical = true
 
 # Quotes data (from profile fetch): quotes, stable_tour
 quotes = true
+
+# Forecasted odds
+forecasted_odds = true

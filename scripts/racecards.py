@@ -285,6 +285,10 @@ def parse_runners(
                     for q in profile["stable_quotes"]
                 ]
 
+        # Forecasted odds
+        if should_include_group("forecasted_odds"):
+            runner.forecasted_odds = float(runner_json.get("forecastOddsValue") or 0.0) or None
+
     return runners
 
 
@@ -347,7 +351,8 @@ def scrape_racecards(
                     f"https://www.racingpost.com/api/racing/free-stats-tab/?raceId={race_id}&date={date}"
                 )
                 if status == 200:
-                    stats = Stats(resp.json())
+                    _json = resp.json()
+                    stats = Stats(_json)
 
             racecard: Racecard = Racecard()
 
