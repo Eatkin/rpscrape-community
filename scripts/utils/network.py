@@ -9,8 +9,12 @@ from curl_cffi import Response
 from curl_cffi import Session
 
 
-class Persistent406Error(Exception):
+class PersistentBlockError(Exception):
     pass
+
+
+# Racing Post signals throttling/blocking with 406 (IP block), 429 or 403.
+BLOCK_STATUSES = frozenset({403, 406, 429})
 
 
 BROWSERS: Sequence[BrowserTypeLiteral] = (
@@ -58,6 +62,7 @@ class NetworkClient:
         retries = self.retries if retries is None else retries
         delay = self.retry_delay if delay is None else delay
         backoff = 1
+        status = None
         for attempt in range(1, retries):
             self._pace()
 
@@ -67,11 +72,19 @@ class NetworkClient:
                 timeout=self.timeout,
             )
 
-            if response.status_code != 406:
-                return response.status_code, response
+            status = response.status_code
+            if status not in BLOCK_STATUSES:
+                return status, response
 
-            if attempt < retries:
-                sleep(delay * backoff)
+            if attempt < retries - 1:
+                sleep(max(delay * backoff, self._retry_after(response)))
                 backoff *= 2
 
-        raise Persistent406Error(f"received 406 for {retries} attempts on {url}")
+        raise PersistentBlockError(f"blocked (status {status}) for {retries - 1} attempts on {url}")
+
+    @staticmethod
+    def _retry_after(response: Response) -> float:
+        try:
+            return float(response.headers.get("Retry-After", 0))
+        except ValueError:
+            return 0.0
